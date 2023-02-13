@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "certoratomation"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+click = "^8.1.3"
+fastapi = "^0.89.1"
+uvicorn = {extras = ["standard"], version= "^0.20.0"}
+playwright = "^1.29.1"
+pytest-playwright = "^0.3.0"
+pytest-asyncio = "^0.20.3"
+pytest-html = "^3.2.0"
+
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
