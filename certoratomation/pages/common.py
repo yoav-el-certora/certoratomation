@@ -9,5 +9,8 @@ def validate_and_click_button(button: Locator):
     return True
 
 
+# EXPECTED_STATUS_DROPDOWN_LIST = \
+#             ['Violated', 'Verified']
+
 EXPECTED_STATUS_DROPDOWN_LIST = \
             ['Violated', 'Unknown', 'Error', 'Timeout', 'Skipped', 'Verified', 'Running', 'Sanity failed']

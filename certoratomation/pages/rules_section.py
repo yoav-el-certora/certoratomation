@@ -21,6 +21,7 @@ class RulesSectionPage:
         self.rules_collapse_button = self.left_section_content.locator('.q-icon.icon-kindcollapseAll')
         self.rules_filter_drop = self.left_section_content.locator('.fliter_drop')
         self.rules_filter_search = self.left_section_content.locator('.filter_search')
+        self.rules_sort_by_name_button = self.left_section_content.locator('button', has_text='Name')
 
     def navigate_base_page(self):
         self.page.goto('/')
@@ -61,10 +62,6 @@ class RulesSectionPage:
         filter_drop_text = self.rules_filter_drop.locator('.q-field__control-container')
         return filter_drop_text.inner_text()
 
-    def get_filter_search_text(self):
-        filter_search_text = self.rules_filter_search.locator('.q-field__native.q-placeholder')
-        return filter_search_text.get_attribute('placeholder')
-
     def get_status_dropdown_list(self):
         all_statuses_from_dropdown = self.status_dropdown_content.locator('.q-item__label')
         return [all_statuses_from_dropdown.nth(i).inner_text() for i in range(all_statuses_from_dropdown.count())]
@@ -86,13 +83,92 @@ class RulesSectionPage:
 
         return output
 
-    def click_on_clear_selected_status(self, status) -> bool:
-        selected_status = self.left_section_content.locator('.q-badge.flex.inline', has_text=status)
-        return validate_and_click_button(selected_status)
+    def get_statuses_from_rules_list(self) -> list:
+        all_rules = self.left_section_content.locator('.q-tree__node.relative-position.q-tree__node--child')
+
+        all_rules_locators = [all_rules.nth(i).locator('.q-icon.status_icon').first for i in range(all_rules.count())]
+
+        all_rules_icons = [rule_locator.get_attribute('class') for rule_locator in all_rules_locators]
+
+        all_statuses_icons = list(filter(lambda icon: 'kindmesage' not in icon, all_rules_icons))
+        all_rules_statuses = [icon.replace('q-icon status_icon icon-kind', '') for icon in all_statuses_icons]
+        all_rules_statuses = [status.split('-')[0] for status in all_rules_statuses]
+
+        return all_rules_statuses
+
+    def click_on_clear_selected_statuses(self, statuses: list) -> bool:
+        output = True
+        for status in statuses:
+            selected_status = self.left_section_content.locator('.q-badge.flex.inline', has_text=status)
+            output = output and validate_and_click_button(selected_status)
+
+        return output
 
     def click_on_clear_all_selected_status(self) -> bool:
         selected_status = self.left_section_content.locator('.cursor-pointer.a_decoration', has_text='Clear all')
         return validate_and_click_button(selected_status)
+
+    def get_filter_search_text(self):
+        filter_search_text = self.rules_filter_search.locator('.q-field__native.q-placeholder')
+        return filter_search_text.get_attribute('placeholder')
+
+    def get_child_rules_names_from_rules_list(self) -> list:
+        return self.get_rules_names_from_rules_list(child=True)
+
+    def get_rules_names_from_rules_list(self, child: bool = False) -> list:
+        child = '--child' if child else ''
+        all_rules = self.left_section_content.locator(f'.q-tree__node.relative-position.q-tree__node{child}')
+
+        def get_rules_name_from_first_inner_text(loc: Locator):
+            if loc.count() == 1:
+                return loc.locator('.no-margin').inner_text()
+            else:
+                return loc.first.locator('.no-margin').inner_text()
+
+        all_rules_locators = \
+            [all_rules.nth(i).locator('.q-tree__node-header-content') for i in range(all_rules.count())]
+
+        all_rules_names = \
+            [get_rules_name_from_first_inner_text(rule_locator) for rule_locator in all_rules_locators]
+
+        return all_rules_names
+
+    def get_rules_tree_from_rules_list(self) -> list:
+        all_rules = self.left_section_content.locator('.q-tree__node.relative-position.q-tree__node')
+
+        def get_rules_name_from_first_inner_text(loc: Locator):
+            if loc.count() == 1:
+                return loc.locator('.no-margin').inner_text()
+            else:
+                return [get_rules_name_from_first_inner_text(loc.nth(i)) for i in range(loc.count())]
+
+        all_rules_locators = \
+            [all_rules.nth(i).locator('.q-tree__node-header-content') for i in range(all_rules.count())]
+
+        all_rules_names = \
+            [get_rules_name_from_first_inner_text(rule_locator) for rule_locator in all_rules_locators]
+
+        def balance_rules_tree_recursive(rules_names: list) -> list:
+            i = 0
+            while i < len(rules_names):
+                if type(rules_names[i]) == list:
+                    for j in range(len(rules_names[i])-1):
+                        if type(rules_names[i+1]) == list:
+                            temp = rules_names[i+1]
+                            rules_names[i + 1] = rules_names[i][1+j]
+                            rules_names[i][1 + j] = temp
+                        del rules_names[i+1]
+                    balance_rules_tree_recursive(rules_names[i])
+                i = i + 1
+            return rules_names
+
+        return balance_rules_tree_recursive(all_rules_names)
+
+    def filter_by_search_text(self, search):
+        self.rules_filter_search.locator('.q-field__native.q-placeholder').fill(search)
+
+    def clear_filter_by_search_text(self):
+        return validate_and_click_button(button=self.rules_filter_search.get_by_text('clear'))
 
     def click_on_status_dropdown(self):
         return validate_and_click_button(button=self.rules_filter_drop)
@@ -102,3 +178,6 @@ class RulesSectionPage:
 
     def click_on_collapse_rules(self):
         return validate_and_click_button(button=self.rules_collapse_button)
+
+    def click_on_sort_rules_by_name(self):
+        return validate_and_click_button(button=self.rules_sort_by_name_button)

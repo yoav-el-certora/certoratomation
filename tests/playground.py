@@ -123,3 +123,15 @@ class TestClass:
     def test_three(self):
         print('three')
 
+
+EXPECTED_STATUS_DROPDOWN_LIST = \
+            ['Violated', 'Unknown', 'Error', 'Timeout', 'Skipped', 'Verified', 'Running', 'Sanity failed']
+
+
+@pytest.fixture(params=EXPECTED_STATUS_DROPDOWN_LIST)
+def statuses(request):
+    return request.param
+
+
+def test_two(statuses):
+    print(statuses)
