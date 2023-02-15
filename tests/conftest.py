@@ -5,6 +5,7 @@ import json
 from playwright.async_api import Page
 
 from certoratomation.pages.common import EXPECTED_STATUS_DROPDOWN_LIST
+from certoratomation.pages.contracts_section import ContractsSectionPage
 from certoratomation.pages.tool_bar import ToolBarPage
 from certoratomation.pages.main_screen import MainScreenPage
 from certoratomation.pages.rules_section import RulesSectionPage
@@ -33,6 +34,11 @@ def main_screen_page(request, page: Page):
 @pytest.fixture
 def rules_section_page(request, page: Page):
     return RulesSectionPage(page=page)
+
+
+@pytest.fixture
+def contract_section_page(request, page: Page):
+    return ContractsSectionPage(page=page)
 
 
 @pytest.fixture(params=EXPECTED_STATUS_DROPDOWN_LIST)

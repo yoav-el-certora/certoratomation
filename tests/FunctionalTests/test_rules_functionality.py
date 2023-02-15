@@ -27,7 +27,7 @@ class TestMainRulesFunctionality:
         assert self.rules_section_page.click_on_collapse_rules()
         assert self.rules_section_page.validate_all_parent_rules_closed()
 
-    def test_filter_status_text_display(self):
+    def test_status_dropdown_text_display(self):
         assert self.rules_section_page.validate_rules_tab_is_selected(), 'Error! Main Window Should Open On Rules Tab!'
         selected_tab_name = self.rules_section_page.get_selected_tab_name()
         assert selected_tab_name == 'Rules', 'Error! Main Window Should Open On Rules Tab!'
@@ -74,8 +74,6 @@ class TestMainRulesFunctionality:
         all_rules_statuses = self.rules_section_page.get_statuses_from_rules_list()
         lower_random_statuses = [status.lower() for status in random_statuses]
         assert all(status.lower() in lower_random_statuses for status in all_rules_statuses)
-
-
 
     def test_validate_appearance_filter_single_status_and_clear(self, rules_statuses):
         assert self.rules_section_page.validate_rules_tab_is_selected(), 'Error! Main Window Should Open On Rules Tab!'
@@ -135,7 +133,7 @@ class TestMainRulesFunctionality:
 
         # TODO: Add here a validation for rules returning
 
-    def test_validate_appearance_clear_all_statuses_after_filter(self):
+    def test_validate_clear_all_statuses_after_filter(self):
         assert self.rules_section_page.validate_rules_tab_is_selected(), 'Error! Main Window Should Open On Rules Tab!'
         selected_tab_name = self.rules_section_page.get_selected_tab_name()
         assert selected_tab_name == 'Rules', 'Error! Main Window Should Open On Rules Tab!'

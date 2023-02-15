@@ -6,7 +6,6 @@ from certoratomation.pages.common import validate_and_click_button
 
 
 class RulesSectionPage:
-    selected_rule: Locator
 
     def __init__(self, page: Page):
         self.page = page
