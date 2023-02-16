@@ -4,7 +4,7 @@ import pytest
 from certoratomation.pages.contracts_section import ContractsSectionPage
 
 
-class TestMainRulesFunctionality:
+class TestContractsFunctionality:
 
     @pytest.fixture(autouse=True)
     def setup(self, contract_section_page: ContractsSectionPage):

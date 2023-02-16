@@ -118,4 +118,8 @@ class ContractsSectionPage:
         return validate_and_click_button(button=self.contracts_expand_button)
 
     def click_on_collapse_contracts(self):
-        return validate_and_click_button(button=self.contracts_collapse_button)
+        x = self.contracts_expand_button.count()
+        output = validate_and_click_button(button=self.contracts_collapse_button)
+        z = self.contracts_expand_button.count()
+        expect(self.contracts_expand_button).to_be_visible()
+        return output

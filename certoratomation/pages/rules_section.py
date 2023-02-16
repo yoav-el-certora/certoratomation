@@ -2,6 +2,7 @@ import re
 
 from playwright.sync_api import Page, Locator, expect
 
+from certoratomation.data_classes.rules_layout import RuleLayout
 from certoratomation.pages.common import validate_and_click_button
 
 
@@ -69,6 +70,7 @@ class RulesSectionPage:
         output = True
         for status in statuses:
             selected_status = self.status_dropdown_content.locator('.q-item__label', has_text=status)
+            expect(selected_status).to_be_visible()
             output = output and validate_and_click_button(button=selected_status)
 
         return output
@@ -83,17 +85,31 @@ class RulesSectionPage:
         return output
 
     def get_statuses_from_rules_list(self) -> list:
-        all_rules = self.left_section_content.locator('.q-tree__node.relative-position.q-tree__node--child')
+        rules_data = self.get_rules_data_from_rules_list()
 
-        all_rules_locators = [all_rules.nth(i).locator('.q-icon.status_icon').first for i in range(all_rules.count())]
+        def get_rules_status_from_rules_data(rules_data_inner) -> list:
+            rules_statuses = []
+            for rule in rules_data_inner:
+                rules_statuses.append(rule.rule_status)
+                if rule.rule_children:
+                    rules_statuses.extend(get_rules_status_from_rules_data(rule.rule_children))
+            return rules_statuses
 
-        all_rules_icons = [rule_locator.get_attribute('class') for rule_locator in all_rules_locators]
+        return get_rules_status_from_rules_data(rules_data)
 
-        all_statuses_icons = list(filter(lambda icon: 'kindmesage' not in icon, all_rules_icons))
-        all_rules_statuses = [icon.replace('q-icon status_icon icon-kind', '') for icon in all_statuses_icons]
-        all_rules_statuses = [status.split('-')[0] for status in all_rules_statuses]
+    def get_statuses_from_child_rules_list(self) -> list:
+        rules_data = self.get_rules_data_from_rules_list()
 
-        return all_rules_statuses
+        def get_rules_status_from_rules_data(rules_data_inner) -> list:
+            rules_statuses = []
+            for rule in rules_data_inner:
+                if rule.rule_children:
+                    rules_statuses.extend(get_rules_status_from_rules_data(rule.rule_children))
+                else:
+                    rules_statuses.append(rule.rule_status)
+            return rules_statuses
+
+        return get_rules_status_from_rules_data(rules_data)
 
     def click_on_clear_selected_statuses(self, statuses: list) -> bool:
         output = True
@@ -118,50 +134,60 @@ class RulesSectionPage:
         child = '--child' if child else ''
         all_rules = self.left_section_content.locator(f'.q-tree__node.relative-position.q-tree__node{child}')
 
-        def get_rules_name_from_first_inner_text(loc: Locator):
-            if loc.count() == 1:
-                return loc.locator('.no-margin').inner_text()
-            else:
-                return loc.first.locator('.no-margin').inner_text()
-
         all_rules_locators = \
             [all_rules.nth(i).locator('.q-tree__node-header-content') for i in range(all_rules.count())]
 
         all_rules_names = \
-            [get_rules_name_from_first_inner_text(rule_locator) for rule_locator in all_rules_locators]
+            [rule_locator.first.locator('.no-margin').inner_text() for rule_locator in all_rules_locators]
 
         return all_rules_names
 
     def get_rules_tree_from_rules_list(self) -> list:
+        rules_data = self.get_rules_data_from_rules_list()
+
+        def get_rules_name_from_rules_data(rule: RuleLayout):
+            if not rule.rule_children:
+                return rule.rule_name
+            else:
+                output = [rule.rule_name]
+                output.extend([get_rules_name_from_rules_data(child_rule) for child_rule in rule.rule_children])
+                return output
+
+        return [get_rules_name_from_rules_data(rule) for rule in rules_data]
+
+    def get_rules_data_from_rules_list(self) -> list[RuleLayout]:
         all_rules = self.left_section_content.locator('.q-tree__node.relative-position.q-tree__node')
 
-        def get_rules_name_from_first_inner_text(loc: Locator):
-            if loc.count() == 1:
-                return loc.locator('.no-margin').inner_text()
-            else:
-                return [get_rules_name_from_first_inner_text(loc.nth(i)) for i in range(loc.count())]
+        def get_rules_data_recursive(loc: Locator) -> RuleLayout:
+            rule_status = loc.locator('.q-icon.status_icon').first.get_attribute('class')
+            rule_status = rule_status.replace('q-icon status_icon icon-kind', '').split('-')[0]
+
+            rule_runtime = loc.locator('.inline.q-ml-xs').first.inner_text()
+            rule_runtime = re.search(r'\d+', rule_runtime).group(0)
+
+            return RuleLayout(
+                    rule_status=rule_status,
+                    rule_name=loc.locator('.no-margin').first.inner_text(),
+                    rule_runtime=rule_runtime,
+                    rule_children=[get_rules_data_recursive(loc.nth(i+1)) for i in range(loc.count()-1)]
+                )
 
         all_rules_locators = \
             [all_rules.nth(i).locator('.q-tree__node-header-content') for i in range(all_rules.count())]
 
-        all_rules_names = \
-            [get_rules_name_from_first_inner_text(rule_locator) for rule_locator in all_rules_locators]
+        all_rules_data = \
+            [get_rules_data_recursive(rule_locator) for rule_locator in all_rules_locators]
 
-        def balance_rules_tree_recursive(rules_names: list) -> list:
+        def balance_rules_tree_recursive(rules_data: list[RuleLayout]) -> list[RuleLayout]:
             i = 0
-            while i < len(rules_names):
-                if type(rules_names[i]) == list:
-                    for j in range(len(rules_names[i])-1):
-                        if type(rules_names[i+1]) == list:
-                            temp = rules_names[i+1]
-                            rules_names[i + 1] = rules_names[i][1+j]
-                            rules_names[i][1 + j] = temp
-                        del rules_names[i+1]
-                    balance_rules_tree_recursive(rules_names[i])
+            while i < len(rules_data):
+                for j in range(len(rules_data[i].rule_children)):
+                    del rules_data[i+1]
+                balance_rules_tree_recursive(rules_data[i].rule_children)
                 i = i + 1
-            return rules_names
+            return rules_data
 
-        return balance_rules_tree_recursive(all_rules_names)
+        return balance_rules_tree_recursive(all_rules_data)
 
     def filter_by_search_text(self, search):
         self.rules_filter_search.locator('.q-field__native.q-placeholder').fill(search)
@@ -170,7 +196,9 @@ class RulesSectionPage:
         return validate_and_click_button(button=self.rules_filter_search.get_by_text('clear'))
 
     def click_on_status_dropdown(self):
-        return validate_and_click_button(button=self.rules_filter_drop)
+        output = validate_and_click_button(button=self.rules_filter_drop)
+        expect(self.status_dropdown_content.locator('.q-item__label').first).to_be_visible()
+        return output
 
     def click_on_expand_rules(self):
         return validate_and_click_button(button=self.rules_expand_button)
