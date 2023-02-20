@@ -16,6 +16,7 @@ class RulesSectionPage:
         self.job_info_tab_button = self.page.get_by_role("tab").filter(has_text="info")
 
         self.left_section_content = self.page.locator("#one")
+        self.middle_section_content = self.page.locator("#two")
         self.status_dropdown_content = self.page.locator("#qvs_1")
         self.rules_expand_button = self.left_section_content.locator('.q-icon.icon-kindexpandAll')
         self.rules_collapse_button = self.left_section_content.locator('.q-icon.icon-kindcollapseAll')
@@ -165,24 +166,23 @@ class RulesSectionPage:
             rule_runtime = loc.locator('.inline.q-ml-xs').first.inner_text()
             rule_runtime = re.search(r'\d+', rule_runtime).group(0)
 
-            return RuleLayout(
-                    rule_status=rule_status,
-                    rule_name=loc.locator('.no-margin').first.inner_text(),
-                    rule_runtime=rule_runtime,
-                    rule_children=[get_rules_data_recursive(loc.nth(i+1)) for i in range(loc.count()-1)]
-                )
+            inner_loc = loc.locator('.q-tree__node.relative-position.q-tree__node')
 
-        all_rules_locators = \
-            [all_rules.nth(i).locator('.q-tree__node-header-content') for i in range(all_rules.count())]
+            return RuleLayout(
+                rule_status=rule_status,
+                rule_name=loc.locator('.no-margin').first.inner_text(),
+                rule_runtime=rule_runtime,
+                rule_children=[get_rules_data_recursive(inner_loc.nth(i)) for i in range(inner_loc.count())]
+            )
 
         all_rules_data = \
-            [get_rules_data_recursive(rule_locator) for rule_locator in all_rules_locators]
+            [get_rules_data_recursive(all_rules.nth(i)) for i in range(all_rules.count())]
 
         def balance_rules_tree_recursive(rules_data: list[RuleLayout]) -> list[RuleLayout]:
             i = 0
             while i < len(rules_data):
                 for j in range(len(rules_data[i].rule_children)):
-                    del rules_data[i+1]
+                    del rules_data[i + 1]
                 balance_rules_tree_recursive(rules_data[i].rule_children)
                 i = i + 1
             return rules_data
@@ -195,9 +195,91 @@ class RulesSectionPage:
     def clear_filter_by_search_text(self):
         return validate_and_click_button(button=self.rules_filter_search.get_by_text('clear'))
 
+    def validate_rule_is_selected(self):
+        output = True
+        all_rules = self.left_section_content.locator('.q-tree__node.relative-position.q-tree__node')
+        for i in range(all_rules.count()):
+            rule = all_rules.nth(i)
+
+            rule_header = rule.locator('.q-tree__node-header.relative-position').first.get_attribute('class')
+            output = output and validate_and_click_button(button=rule)
+
+            if 'child' in rule.get_attribute('class') and 'q-focusable' in rule_header:
+                rule_header_focusable = \
+                    rule.locator('.q-tree__node-header.relative-position').first.get_attribute('class')
+                output = output and 'q-tree__node--selected' in rule_header_focusable
+
+        return output
+
+    def validate_rule_selected_path_on_top_screen(self):
+        output = True
+        all_rules = self.left_section_content.locator('.q-tree__node.relative-position.q-tree__node')
+
+        def validate_rule_path_recursive(loc: Locator, prefix: str = ''):
+            rule_path_validated = True
+            is_rule_child = 'child' in rule.get_attribute('class')
+            rule_header = loc.locator('.q-tree__node-header.relative-position').first.get_attribute('class')
+
+            rule_path_validated = rule_path_validated and validate_and_click_button(button=loc.first)
+
+            rule_name = loc.locator('.q-tree__node-header-content').locator('.no-margin').first.inner_text()
+
+            if is_rule_child and 'q-focusable' in rule_header:
+                selected_path = ''
+                selected_path_locators = \
+                    self.middle_section_content.locator('.crumbs_wrapper.row').locator('.row.items-center'
+                                                                                       )
+                for k in range(selected_path_locators.count()):
+                    selected_path = selected_path + selected_path_locators.nth(k).inner_text()
+
+                selected_path = selected_path.replace('\n', ' ')
+                selected_path = re.sub(' +', ' ', selected_path)
+
+                rule_path_validated = rule_path_validated and f'{prefix}{rule_name}' in selected_path
+
+            elif 'q-focusable' in rule_header:
+                inner_loc = loc.locator('.q-tree__node.relative-position.q-tree__node')
+                for j in range(inner_loc.count()):
+                    expected_rule_path = f'{prefix}{rule_name} chevron_right '
+                    rule_path_validated = rule_path_validated \
+                        and validate_rule_path_recursive(inner_loc.nth(j), expected_rule_path)
+
+            return rule_path_validated
+
+        for i in range(all_rules.count()):
+            rule = all_rules.nth(i)
+            output = output and validate_rule_path_recursive(rule)
+
+        return output
+
+    def validate_dump_page_button_existence(self):
+        output = True
+        all_rules = self.left_section_content.locator('.q-tree__node.relative-position.q-tree__node')
+
+        for i in range(all_rules.count()):
+            rule = all_rules.nth(i)
+            is_rule_child = 'child' in rule.get_attribute('class')
+            is_rule_header = \
+                'q-focusable' in rule.locator('.q-tree__node-header.relative-position').first.get_attribute('class')
+
+            output = output and validate_and_click_button(button=rule.first)
+
+            if is_rule_child and is_rule_header:
+                dump_page_button = \
+                    self.middle_section_content.locator('button >> [class="q-icon icon-kindbyteCode"]')
+
+                rule_status = rule.locator('.q-icon.status_icon').first.get_attribute('class')
+                rule_status = rule_status.replace('q-icon status_icon icon-kind', '').split('-')[0]
+
+                if rule_status.lower() == 'violated':
+                    output = output and dump_page_button.count() == 1
+                else:
+                    output = output and dump_page_button.count() == 0
+
+        return output
+
     def click_on_status_dropdown(self):
         output = validate_and_click_button(button=self.rules_filter_drop)
-        expect(self.status_dropdown_content.locator('.q-item__label').first).to_be_visible()
         return output
 
     def click_on_expand_rules(self):

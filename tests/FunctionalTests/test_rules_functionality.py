@@ -103,8 +103,6 @@ class TestRulesFunctionality:
         for clear_random_status in clear_random_statuses:
             assert f'{clear_random_status}\nclear' not in actual_status_text_after_clear
 
-        # TODO: Add here a validation for rules returning
-
     def test_validate_clear_all_statuses_after_filter(self):
         assert self.rules_section_page.click_on_status_dropdown()
         random_statuses = [status for status in EXPECTED_STATUS_DROPDOWN_LIST if random.randint(0, 1)]
@@ -121,8 +119,6 @@ class TestRulesFunctionality:
 
         actual_status_text_after_clear = self.rules_section_page.get_selected_statuses_from_dropdown_badge_text()
         assert len(actual_status_text_after_clear) == 0
-
-        # TODO: Add here a validation for rules returning
 
     def test_filter_search_text_display(self):
         filter_search_text = self.rules_section_page.get_filter_search_text()
@@ -162,6 +158,8 @@ class TestRulesFunctionality:
         rules_data = self.rules_section_page.get_rules_data_from_rules_list()
 
         def verify_rules_data_recursive(rules_expected_data, rules_actual_data):
+            assert len(rules_expected_data) == len(rules_actual_data)
+
             for expected_rule, actual_rule in zip(rules_expected_data, rules_actual_data):
                 assert expected_rule.get('name').lower() == actual_rule.rule_name.lower()
                 assert expected_rule.get('status').lower() == actual_rule.rule_status.lower()
@@ -169,7 +167,29 @@ class TestRulesFunctionality:
 
                 verify_rules_data_recursive(expected_rule.get('children'), actual_rule.rule_children)
 
-        verify_rules_data_recursive(tree_view_status.get('rules'), rules_data)
+        def aggregate_asserts_recursive(rules_list):
+            for rule in rules_list:
+                if rule.get('children'):
+                    aggregate_asserts_recursive(rule.get('children'))
+
+                if rule.get('asserts'):
+                    for rule_asserts in rule.get('asserts'):
+                        rule_asserts['name'] = rule_asserts['message']
+                        rule_asserts['children'] = []
+                    rule['children'].extend(rule['asserts'])
+
+        actual_rules = tree_view_status.get('rules')
+        aggregate_asserts_recursive(actual_rules)
+        verify_rules_data_recursive(actual_rules, rules_data)
+
+    def test_validate_rules_selection_appearance(self, tree_view_status: dict):
+        assert self.rules_section_page.validate_rule_is_selected()
+
+    def test_validate_rule_selected_path_on_top_screen(self, tree_view_status: dict):
+        assert self.rules_section_page.validate_rule_selected_path_on_top_screen()
+
+    def test_validate_dump_page_button_existence(self, tree_view_status: dict):
+        assert self.rules_section_page.validate_dump_page_button_existence()
 
 
 

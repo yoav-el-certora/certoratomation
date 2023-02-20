@@ -7,3 +7,4 @@ class RuleLayout:
     rule_name: str
     rule_runtime: str
     rule_children: list
+    click_able: bool = False

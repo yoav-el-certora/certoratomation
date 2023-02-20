@@ -6,6 +6,7 @@ __all__ = (
     "run_server"
 )
 
+
 @click.group()
 def cli():
     pass
@@ -18,5 +19,3 @@ def run_server(host: str = None, port: int = None):
     from .server.app import run_server
     run_server(host, port)
     pass
-
-
