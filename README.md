@@ -6,7 +6,7 @@
 - [Git](https://git-scm.com/downloads)
 - Pip
 - Python3.11
-- playwright
+- playwright (run cli 'pip3 install playwright')
 - [Poetry](https://python-poetry.org/docs/)
 - [NodeJS](https://nodejs.org/en/download) (latest?)
 
@@ -28,8 +28,8 @@ VITE_LOCAL='true'"> .env'
   - Init submodules - run cli 'git submodule init ; git submodule update --recursive'
 ######
 - Install Framework
-  - run cli 'poetry lock ; poetry install'
-  - run cli 'playwright install'
+  - Run cli 'poetry lock ; poetry install'
+  - Run cli 'playwright install'
 ######
 - Folder structure should be as follows:
   - ROOT_FOLDER_EXAMPLE
