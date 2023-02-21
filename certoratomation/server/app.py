@@ -1,5 +1,4 @@
 """CertoraTomation Server Entrypoint"""
-import multiprocessing
 
 from fastapi import FastAPI
 from .handlers import run_environment, run_test_package
@@ -37,23 +36,9 @@ def run_server(host: str = None, port: int = None):
 
 
 def run_ci_tests():
-    dev_utils_server = multiprocessing.Process(
-        target=run_dev_utils,
-        name='certora automation localhost',
-        daemon=True
-    )
-    new_report_server = multiprocessing.Process(
-        target=run_new_report,
-        name='certora automation localhost',
-        daemon=True
-    )
-
-    dev_utils_server.start()
-    new_report_server.start()
+    run_dev_utils()
+    run_new_report()
 
     return_code = run_tests()
-
-    dev_utils_server.terminate()
-    new_report_server.terminate()
 
     return return_code

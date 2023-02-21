@@ -17,16 +17,19 @@
   - 'cd ROOT_FOLDER_EXAMPLE'
 ######
 - Clone FE to root folder 
-  - 'git clone -b main git@github.com:Certora/new_report.git'
+  - run cli 'git clone -b main git@github.com:Certora/new_report.git'
+- Init .env file inside FE folder
+  - run cli 'cd new_report ; echo "VITE_PROXY='http://35.166.30.60:8080/https://vaas-stg.certora.com'
+VITE_LOCAL='true'"> .env'
 ######
 - Clone automation project to root folder 
-  - 'git clone -b main git@github.com:yoav-el-certora/certoratomation.git'
-  - Navigate inside automation project - 'cd certoratomation'
-  - Init submodules - 'git submodule init ; git submodule update --recursive'
+  - run cli 'git clone -b main git@github.com:yoav-el-certora/certoratomation.git'
+  - Navigate inside automation project - run cli 'cd certoratomation'
+  - Init submodules - run cli 'git submodule init ; git submodule update --recursive'
 ######
 - Install Framework
-  - 'poetry lock ; poetry install'
-  - 'playwright install'
+  - run cli 'poetry lock ; poetry install'
+  - run cli 'playwright install'
 ######
 - Folder structure should be as follows:
   - ROOT_FOLDER_EXAMPLE
@@ -41,9 +44,9 @@
 ### Running Server/CI
 
 - Navigate to certoratomation folder
-- Run 'poetry run python3 certoratomation -h' for options.
-- Run 'poetry run python3 certoratomation --run_server' to init local server for API communication.
-- Run 'poetry run python3 certoratomation --run_ci' to execute all CI tests.
+- Run cli 'poetry run python3 certoratomation -h' for options.
+- Run cli 'poetry run python3 certoratomation --run_server' to init local server for API communication.
+- Run cli 'poetry run python3 certoratomation --run_ci' to execute all CI tests.
 
 
 
