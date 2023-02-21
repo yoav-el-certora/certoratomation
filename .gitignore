@@ -1,3 +1,3 @@
-*.html
-*.xml
-*.lock
+tests/**/*.html
+tests/**/*.xml
+.lock
