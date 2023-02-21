@@ -14,6 +14,10 @@ class ProcessHolder:
 
 
 def run_dev_utils():
+    subprocess.run(args=HandlersConstants.DEV_UTILS_INSTALL_COMMAND,
+                   cwd=HandlersConstants.DEV_UTILS,
+                   shell=True
+                   )
     ProcessHolder.DEV_UTILS_PROCESS.append(
         subprocess.Popen(
             args=HandlersConstants.DEV_UTILS_RUN_COMMAND,
