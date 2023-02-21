@@ -1,0 +1,107 @@
+{
+    "treeViewPath": {
+        "ruleName": "call_use_if3",
+        "assertId": null,
+        "assertMessage": null,
+        "next": null
+    },
+    "graph_link": null,
+    "jumpToDefinition": [
+        {
+            "file": "Test.spec",
+            "line": 38,
+            "col": 6
+        }
+    ],
+    "result": "VERIFIED",
+    "assertMessage": null,
+    "callResolution": [
+        {
+            "caller": {
+                "name": "Test.call_use_if3(uint256,uint256)",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "SomeContract(someContract).use_if3(a, b)",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_Test.sol",
+                        "line": 15,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "UNRESOLVED optimistic Dispatcher summary @ Test.spec:20:49",
+            "comments": [
+                {
+                    "alternatives": "[SomeContractA.use_if3, SomeContractB.use_if3]"
+                },
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: use_if3(uint256,uint256)",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": false
+        },
+        {
+            "caller": {
+                "name": "SomeContractA.use_if3(uint256,uint256)",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "my_internal_function_3(a, c)",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_SomeContractA.sol",
+                        "line": 38,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "ALL Always 8 summary @ Test.spec:8:48",
+            "comments": [
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: (internal) SomeContractA.my_internal_function_3(uint256,uint256)",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": false
+        },
+        {
+            "caller": {
+                "name": "SomeContractB.use_if3(uint256,uint256)",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "my_internal_function_3(a, c)",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_SomeContractB.sol",
+                        "line": 38,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "ALL Always 8 summary @ Test.spec:8:48",
+            "comments": [
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: (internal) SomeContractB.my_internal_function_3(uint256,uint256)",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": false
+        }
+    ],
+    "callResolutionWarnings": [],
+    "callTrace": null,
+    "variables": []
+}

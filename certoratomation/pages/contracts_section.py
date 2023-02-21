@@ -115,11 +115,8 @@ class ContractsSectionPage:
         return validate_and_click_button(button=self.contracts_filter_search.get_by_text('clear'))
 
     def click_on_expand_contracts(self):
-        return validate_and_click_button(button=self.contracts_expand_button)
+        return validate_and_click_button(button=self.contracts_expand_button, with_wait=True)
 
     def click_on_collapse_contracts(self):
-        x = self.contracts_expand_button.count()
-        output = validate_and_click_button(button=self.contracts_collapse_button)
-        z = self.contracts_expand_button.count()
-        expect(self.contracts_expand_button).to_be_visible()
+        output = validate_and_click_button(button=self.contracts_collapse_button, with_wait=True)
         return output

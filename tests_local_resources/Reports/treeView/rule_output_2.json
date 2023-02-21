@@ -1,0 +1,107 @@
+{
+    "treeViewPath": {
+        "ruleName": "call_use_pf1",
+        "assertId": null,
+        "assertMessage": null,
+        "next": null
+    },
+    "graph_link": null,
+    "jumpToDefinition": [
+        {
+            "file": "Test.spec",
+            "line": 51,
+            "col": 6
+        }
+    ],
+    "result": "VERIFIED",
+    "assertMessage": null,
+    "callResolution": [
+        {
+            "caller": {
+                "name": "Test.call_use_pf1()",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "SomeContract(someContract).use_pf1()",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_Test.sol",
+                        "line": 26,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "UNRESOLVED optimistic Dispatcher summary @ Test.spec:22:34",
+            "comments": [
+                {
+                    "alternatives": "[SomeContractA.use_pf1, SomeContractB.use_pf1]"
+                },
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: use_pf1()",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": false
+        },
+        {
+            "caller": {
+                "name": "SomeContractA.use_pf1()",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "my_public_function_1()",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_SomeContractA.sol",
+                        "line": 69,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "ALL Always 2 summary @ Test.spec:14:31",
+            "comments": [
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: (internal) SomeContractA.my_public_function_1()",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": false
+        },
+        {
+            "caller": {
+                "name": "SomeContractB.use_pf1()",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "this.my_public_function_1()",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_SomeContractB.sol",
+                        "line": 69,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "ALL Always 2 summary @ Test.spec:14:31",
+            "comments": [
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: my_public_function_1()",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": false
+        }
+    ],
+    "callResolutionWarnings": [],
+    "callTrace": null,
+    "variables": []
+}

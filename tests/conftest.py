@@ -1,3 +1,4 @@
+import multiprocessing
 from pathlib import Path
 import pytest
 import json
@@ -9,10 +10,11 @@ from certoratomation.pages.contracts_section import ContractsSectionPage
 from certoratomation.pages.tool_bar import ToolBarPage
 from certoratomation.pages.main_screen import MainScreenPage
 from certoratomation.pages.rules_section import RulesSectionPage
+from certoratomation.server.handlers.run_environment import run_dev_utils, run_new_report
 
-TEMP_PATH = Path('/Users/yoavelmalem/GitRep')
-TREE_VIEW = TEMP_PATH.joinpath('DevUtils/Mac/Reports/treeView')
-TREE_VIEW_STATUS = TREE_VIEW.joinpath('treeViewStatus_10.json')
+ROOT_PATH = Path(__file__).parent.parent
+LOCAL_DATA = ROOT_PATH.joinpath('tests_local_resources/Reports/treeView')
+TREE_VIEW_STATUS = LOCAL_DATA.joinpath('treeViewStatus_10.json')
 
 
 @pytest.fixture
@@ -44,3 +46,23 @@ def contract_section_page(request, page: Page):
 @pytest.fixture(params=EXPECTED_STATUS_DROPDOWN_LIST)
 def rules_statuses(request):
     return request.param
+
+
+def run_local_environment():
+    run_dev_utils()
+    run_new_report()
+
+
+@pytest.fixture()
+def frontend_local_server():
+    local_server_process = multiprocessing.Process(
+        target=run_local_environment,
+        name='certora automation localhost',
+        daemon=True
+    )
+
+    local_server_process.start()
+
+
+
+

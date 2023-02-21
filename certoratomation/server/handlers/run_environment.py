@@ -1,7 +1,7 @@
 import subprocess
 from fastapi import APIRouter, BackgroundTasks
 
-__all__ = ("router",)
+__all__ = ("router", "run_dev_utils", "run_new_report")
 
 from certoratomation.server.handlers.constants import HandlersConstants
 
@@ -13,11 +13,7 @@ class ProcessHolder:
     NEW_REPORT_PROCESS: list = []
 
 
-async def run_dev_utils():
-    subprocess.run(args=HandlersConstants.DEV_UTILS_INSTALL_COMMAND,
-                   cwd=HandlersConstants.DEV_UTILS,
-                   shell=True
-                   )
+def run_dev_utils():
     ProcessHolder.DEV_UTILS_PROCESS.append(
         subprocess.Popen(
             args=HandlersConstants.DEV_UTILS_RUN_COMMAND,
@@ -27,7 +23,7 @@ async def run_dev_utils():
     )
 
 
-async def run_new_report():
+def run_new_report():
     subprocess.run(args=HandlersConstants.NEW_REPORT_INSTALL_COMMAND,
                    cwd=HandlersConstants.NEW_REPORT,
                    shell=True

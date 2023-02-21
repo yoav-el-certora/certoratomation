@@ -1,0 +1,363 @@
+{
+    "treeViewPath": {
+        "ruleName": "call_do_dispatched_recursion",
+        "assertId": null,
+        "assertMessage": null,
+        "next": {
+            "ruleName": null,
+            "assertId": 27,
+            "assertMessage": "When summarizing a call with dispatcher, found we already have it in the stack:SomeContractB.do_dispatched_recursion(address,address), Test.call_do_dispatched_recursion(address,address) consider removing its dispatcher summary.",
+            "next": null
+        }
+    },
+    "graph_link": "Report-call_do_dispatched_recursion.html",
+    "jumpToDefinition": [
+        {
+            "file": "Test.spec",
+            "line": 72,
+            "col": 6
+        }
+    ],
+    "result": "VIOLATED",
+    "assertMessage": "When summarizing a call with dispatcher, found we already have it in the stack:SomeContractB.do_dispatched_recursion(address,address), Test.call_do_dispatched_recursion(address,address) consider removing its dispatcher summary.",
+    "callResolution": [
+        {
+            "caller": {
+                "name": "Test.call_do_dispatched_recursion(address,address)",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "SomeContract(someContract).do_dispatched_recursion(a, b)",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_Test.sol",
+                        "line": 42,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "UNRESOLVED optimistic Dispatcher summary @ Test.spec:27:49",
+            "comments": [
+                {
+                    "alternatives": "[SomeContractA.do_dispatched_recursion, SomeContractB.do_dispatched_recursion]"
+                },
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: do_dispatched_recursion(address,address)",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": true
+        },
+        {
+            "caller": {
+                "name": "SomeContractA.do_dispatched_recursion(address,address)",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "SomeContract(a).do_dispatched_recursion(a, b)",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_SomeContractA.sol",
+                        "line": 87,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "UNRESOLVED optimistic Dispatcher summary @ Test.spec:27:49",
+            "comments": [
+                {
+                    "alternatives": "[SomeContractA.do_dispatched_recursion, SomeContractB.do_dispatched_recursion]"
+                },
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: do_dispatched_recursion(address,address)",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": false
+        },
+        {
+            "caller": {
+                "name": "SomeContractB.do_dispatched_recursion(address,address)",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "SomeContract(b).do_dispatched_recursion(a, b)",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_SomeContractB.sol",
+                        "line": 87,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "UNRESOLVED optimistic Dispatcher summary @ Test.spec:27:49",
+            "comments": [
+                {
+                    "alternatives": "[SomeContractA.do_dispatched_recursion, SomeContractB.do_dispatched_recursion]"
+                },
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: do_dispatched_recursion(address,address)",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": false
+        },
+        {
+            "caller": {
+                "name": "SomeContractB.do_dispatched_recursion(address,address)",
+                "jumpToDefinition": []
+            },
+            "callSite": {
+                "snippet": "SomeContract(b).do_dispatched_recursion(a, b)",
+                "jumpToDefinition": [
+                    {
+                        "file": "1_autoFinder_SomeContractB.sol",
+                        "line": 87,
+                        "col": 0
+                    }
+                ]
+            },
+            "summary": "UNRESOLVED optimistic Dispatcher summary @ Test.spec:27:49",
+            "comments": [
+                {
+                    "alternatives": "[SomeContractA.do_dispatched_recursion, SomeContractB.do_dispatched_recursion]"
+                },
+                {
+                    "use decision": "specification"
+                }
+            ],
+            "callee": {
+                "name": "resolved callee's signature: do_dispatched_recursion(address,address)",
+                "jumpToDefinition": []
+            },
+            "isInCounterExample": true
+        }
+    ],
+    "callResolutionWarnings": [],
+    "callTrace": {
+        "name": "call_do_dispatched_recursion(a=0x2713, b=0x2710)",
+        "returnValue": "",
+        "status": "",
+        "childrenList": [
+            {
+                "name": "multi contract setup",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "rule parameters setup",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "contract address vars initialized",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "last storage initialize",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "assumptions about extcodesize",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "assumptions about contracts' addresses",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "assumptions about starting balances",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "assumptions about static addresses",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "assumptions about uniqueness of contracts' addressses",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "record starting nonces",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "cloned contracts have no balances",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "Linked immutable setup",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [],
+                "jumpToDefinition": [],
+                "variables": []
+            },
+            {
+                "name": "call_do_dispatched_recursion(e,a,b)",
+                "returnValue": "",
+                "status": "",
+                "childrenList": [
+                    {
+                        "name": "Test.call_do_dispatched_recursion()",
+                        "returnValue": "",
+                        "status": "",
+                        "childrenList": [
+                            {
+                                "name": "Load from Test.someContract: 0x2710 (same as b)",
+                                "returnValue": "",
+                                "status": "",
+                                "childrenList": [],
+                                "jumpToDefinition": [],
+                                "variables": []
+                            },
+                            {
+                                "name": "do_dispatched_recursion(address,address): UNRESOLVED optimistic Dispatcher summary @ Test.spec:27:49",
+                                "returnValue": "",
+                                "status": "DISPATCHER",
+                                "childrenList": [
+                                    {
+                                        "name": "SomeContractB.do_dispatched_recursion()",
+                                        "returnValue": "",
+                                        "status": "",
+                                        "childrenList": [
+                                            {
+                                                "name": "(internal) SomeContractB.do_dispatched_recursion(a=0x2713 (same as a), b=0x2710 (same as b))",
+                                                "returnValue": "",
+                                                "status": "",
+                                                "childrenList": [
+                                                    {
+                                                        "name": "do_dispatched_recursion(address,address): UNRESOLVED optimistic Dispatcher summary @ Test.spec:27:49",
+                                                        "returnValue": "",
+                                                        "status": "DISPATCHER",
+                                                        "childrenList": [],
+                                                        "jumpToDefinition": [],
+                                                        "variables": []
+                                                    }
+                                                ],
+                                                "jumpToDefinition": [],
+                                                "variables": []
+                                            }
+                                        ],
+                                        "jumpToDefinition": [],
+                                        "variables": []
+                                    }
+                                ],
+                                "jumpToDefinition": [],
+                                "variables": []
+                            }
+                        ],
+                        "jumpToDefinition": [],
+                        "variables": []
+                    }
+                ],
+                "jumpToDefinition": [],
+                "variables": []
+            }
+        ],
+        "jumpToDefinition": [],
+        "variables": [
+            {
+                "a": "0x2713",
+                "jumpToDefinition": []
+            },
+            {
+                "b": "0x2710",
+                "jumpToDefinition": []
+            }
+        ]
+    },
+    "variables": [
+        {
+            "SomeContractA": "0x270f",
+            "jumpToDefinition": []
+        },
+        {
+            "SomeContractB": "0x2710 (same as b)",
+            "jumpToDefinition": []
+        },
+        {
+            "Test": "0xd0",
+            "jumpToDefinition": []
+        },
+        {
+            "a": "0x2713",
+            "jumpToDefinition": []
+        },
+        {
+            "b": "0x2710",
+            "jumpToDefinition": []
+        },
+        {
+            "e.block.coinbase": "0x401",
+            "jumpToDefinition": []
+        },
+        {
+            "e.msg.address": "6",
+            "jumpToDefinition": []
+        },
+        {
+            "e.msg.sender": "0x402",
+            "jumpToDefinition": []
+        },
+        {
+            "e.msg.value": "0",
+            "jumpToDefinition": []
+        },
+        {
+            "ecrecover": "0x2737",
+            "jumpToDefinition": []
+        }
+    ]
+}

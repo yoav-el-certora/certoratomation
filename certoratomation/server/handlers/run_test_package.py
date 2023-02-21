@@ -3,7 +3,7 @@ from typing import Literal
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException, status
 
-__all__ = ("router",)
+__all__ = ("router", "run_tests")
 
 from pydantic import BaseModel
 
@@ -17,12 +17,11 @@ class RunTestsResponse(BaseModel):
 
 
 def run_tests():
-    subprocess.run(
+    return subprocess.run(
         args=HandlersConstants.RUN_TEST_COMMAND,
         cwd=HandlersConstants.TEST_PACKAGE,
         shell=True
     )
-    return 0
 
 
 @router.post("/run_test_package", response_model=RunTestsResponse, status_code=201)

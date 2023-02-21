@@ -1,0 +1,3 @@
+[submodule "DevUtils"]
+	path = DevUtils
+	url = git@github.com:Certora/DevUtils.git

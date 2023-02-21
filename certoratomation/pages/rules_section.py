@@ -279,14 +279,14 @@ class RulesSectionPage:
         return output
 
     def click_on_status_dropdown(self):
-        output = validate_and_click_button(button=self.rules_filter_drop)
+        output = validate_and_click_button(button=self.rules_filter_drop, with_wait=True)
         return output
 
     def click_on_expand_rules(self):
-        return validate_and_click_button(button=self.rules_expand_button)
+        return validate_and_click_button(button=self.rules_expand_button, with_wait=True)
 
     def click_on_collapse_rules(self):
-        return validate_and_click_button(button=self.rules_collapse_button)
+        return validate_and_click_button(button=self.rules_collapse_button, with_wait=True)
 
     def click_on_sort_rules_by_name(self):
         return validate_and_click_button(button=self.rules_sort_by_name_button)
