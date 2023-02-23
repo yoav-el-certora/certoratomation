@@ -1,13 +1,13 @@
 import subprocess
 from typing import Literal
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks
 
 __all__ = ("router", "run_tests")
 
 from pydantic import BaseModel
 
-from certoratomation.server.handlers.constants import HandlersConstants
+from certoratomation.server.constants import HandlersConstants
 
 router = APIRouter()
 

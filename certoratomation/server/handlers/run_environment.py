@@ -3,7 +3,7 @@ from fastapi import APIRouter, BackgroundTasks
 
 __all__ = ("router", "run_dev_utils", "run_new_report")
 
-from certoratomation.server.handlers.constants import HandlersConstants
+from certoratomation.server.constants import HandlersConstants
 
 router = APIRouter()
 

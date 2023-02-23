@@ -8,6 +8,8 @@ __all__ = (
     "run_certora_automation"
 )
 
+from certoratomation.server.test_runner import CertoraTestRunner
+
 
 @click.group()
 def cli():
@@ -20,6 +22,9 @@ def cli():
 @click.option("-h", "--host", default=None, help="Server Host")
 @click.option("-p", "--port", default=None, help="Server Port")
 def run_certora_automation(run_server, run_ci, host: str = None, port: int = None):
+    # x = CertoraTestRunner(env='stg')
+    # x.init_test_data()
+
     if run_server:
         from .server.app import run_server
         run_server(host, port)

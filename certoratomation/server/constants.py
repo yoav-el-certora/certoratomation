@@ -3,10 +3,11 @@ from pathlib import Path
 
 
 class HandlersConstants:
-    ROOT_PATH = Path(__file__).parent.parent.parent.parent
+    ROOT_PATH = Path(__file__).parent.parent.parent
 
     DEV_UTILS = ROOT_PATH.joinpath('DevUtils/Mac')
     DEV_UTILS_LOCAL_DATA = ROOT_PATH.joinpath('tests_local_resources')
+    LOCAL_DATA_FULL_PATH = DEV_UTILS_LOCAL_DATA.joinpath('Reports/treeView')
     DEV_UTILS_INSTALL_COMMAND = f'pip install {DEV_UTILS}'
     DEV_UTILS_RUN_COMMAND = f'poetry run python3 frontend_mock_api.py -d -c {DEV_UTILS_LOCAL_DATA}'
 
