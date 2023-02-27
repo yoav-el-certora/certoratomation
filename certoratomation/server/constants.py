@@ -5,6 +5,8 @@ from pathlib import Path
 class HandlersConstants:
     ROOT_PATH = Path(__file__).parent.parent.parent
 
+    CONFIG_FILE = ROOT_PATH.joinpath('local/config_file.json')
+
     DEV_UTILS = ROOT_PATH.joinpath('DevUtils/Mac')
     DEV_UTILS_LOCAL_DATA = ROOT_PATH.joinpath('tests_local_resources')
     LOCAL_DATA_FULL_PATH = DEV_UTILS_LOCAL_DATA.joinpath('Reports/treeView')
@@ -17,5 +19,6 @@ class HandlersConstants:
 
     TEST_PACKAGE = ROOT_PATH.joinpath('tests')
     PLAYWRIGHT_INSTALL = 'playwright install'
-    BASE_URL = r'http://localhost:3005/'
-    RUN_TEST_COMMAND = fr'poetry run pytest {TEST_PACKAGE} --base-url {BASE_URL}'
+    RUN_TEST_COMMAND = fr'poetry run pytest {TEST_PACKAGE}'
+    RUN_TEST_PARAMS = '--base-url {environment_url} --browser-channel chrome ' \
+                      '--html={anonymous_key}.html --self-contained-html'

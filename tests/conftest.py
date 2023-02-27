@@ -15,13 +15,14 @@ from certoratomation.server.handlers.run_environment import run_dev_utils, run_n
 
 ROOT_PATH = Path(__file__).parent.parent
 LOCAL_DATA = ROOT_PATH.joinpath('tests_local_resources/Reports/treeView')
-TREE_VIEW_STATUS = LOCAL_DATA.joinpath('treeViewStatus_10.json')
+TREE_VIEW_STATUS = LOCAL_DATA.joinpath('treeViewStatus.json')
 
 
 @pytest.fixture
 def tree_view_status(request):
     with open(file=TREE_VIEW_STATUS, mode='r', encoding='utf-8') as f:
-        return json.load(f)
+        verification_progress = json.load(f)
+    return verification_progress.get('verificationProgress')
 
 
 @pytest.fixture

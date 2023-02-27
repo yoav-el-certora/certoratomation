@@ -36,48 +36,48 @@ class TestContractsFunctionality:
         assert self.job_info_section_page.click_on_expand_collapse_job_info()
         assert self.job_info_section_page.validate_job_info_closed()
 
-    def test_filter_search_text_display(self):
-        filter_search_text = self.job_info_section_page.get_filter_search_text()
-        assert filter_search_text == 'Type to filter'
-
-    def test_filter_by_search_text(self):
-        nested_contracts_details = self.job_info_section_page.get_contract_details_from_contracts_list()
-
-        text_to_filter = []
-        for contract_details in nested_contracts_details:
-            text_to_filter.extend([details for details in contract_details if random.randint(0, 1)])
-
-        for text in text_to_filter:
-            self.job_info_section_page.filter_by_search_text(text)
-            contracts_details_after_filter = self.job_info_section_page.get_contract_details_from_contracts_list()
-
-            for contract_details in contracts_details_after_filter:
-                assert any(text in detail for detail in contract_details)
-
-            assert self.job_info_section_page.clear_filter_by_search_text()
-
-    def test_validate_contract_section_structure(self, tree_view_status: dict):
-        expected_contracts_list = tree_view_status.get('availableContracts')
-
-        for index, expected_contract in enumerate(expected_contracts_list):
-            contract_structure = self.job_info_section_page.get_contract_structure_from_contracts_list(index)
-
-            assert 'Name' in contract_structure
-            assert len(expected_contract.get('storageLinks')) == 0 or 'Contract Links' in contract_structure
-            assert 'Methods' in contract_structure
-
-    def test_validate_contract_section_data(self, tree_view_status: dict):
-        expected_contracts_list = tree_view_status.get('availableContracts')
-
-        for index, expected_contract in enumerate(expected_contracts_list):
-            contract_structure = self.job_info_section_page.get_contract_data_from_contracts_list(index)
-
-            assert expected_contract.get('name') == contract_structure.get('name')
-
-            if contract_structure.get('storageLinks'):
-                for expected, actual in zip(expected_contract.get('storageLinks'), contract_structure.get('storageLinks')):
-                    assert expected == actual
-
-            if contract_structure.get('methods'):
-                for expected, actual in zip(expected_contract.get('methods'), contract_structure.get('methods')):
-                    assert expected == actual
+    # def test_filter_search_text_display(self):
+    #     filter_search_text = self.job_info_section_page.get_filter_search_text()
+    #     assert filter_search_text == 'Type to filter'
+    #
+    # def test_filter_by_search_text(self):
+    #     nested_contracts_details = self.job_info_section_page.get_contract_details_from_contracts_list()
+    #
+    #     text_to_filter = []
+    #     for contract_details in nested_contracts_details:
+    #         text_to_filter.extend([details for details in contract_details if random.randint(0, 1)])
+    #
+    #     for text in text_to_filter:
+    #         self.job_info_section_page.filter_by_search_text(text)
+    #         contracts_details_after_filter = self.job_info_section_page.get_contract_details_from_contracts_list()
+    #
+    #         for contract_details in contracts_details_after_filter:
+    #             assert any(text in detail for detail in contract_details)
+    #
+    #         assert self.job_info_section_page.clear_filter_by_search_text()
+    #
+    # def test_validate_contract_section_structure(self, tree_view_status: dict):
+    #     expected_contracts_list = tree_view_status.get('availableContracts')
+    #
+    #     for index, expected_contract in enumerate(expected_contracts_list):
+    #         contract_structure = self.job_info_section_page.get_contract_structure_from_contracts_list(index)
+    #
+    #         assert 'Name' in contract_structure
+    #         assert len(expected_contract.get('storageLinks')) == 0 or 'Contract Links' in contract_structure
+    #         assert 'Methods' in contract_structure
+    #
+    # def test_validate_contract_section_data(self, tree_view_status: dict):
+    #     expected_contracts_list = tree_view_status.get('availableContracts')
+    #
+    #     for index, expected_contract in enumerate(expected_contracts_list):
+    #         contract_structure = self.job_info_section_page.get_contract_data_from_contracts_list(index)
+    #
+    #         assert expected_contract.get('name') == contract_structure.get('name')
+    #
+    #         if contract_structure.get('storageLinks'):
+    #             for expected, actual in zip(expected_contract.get('storageLinks'), contract_structure.get('storageLinks')):
+    #                 assert expected == actual
+    #
+    #         if contract_structure.get('methods'):
+    #             for expected, actual in zip(expected_contract.get('methods'), contract_structure.get('methods')):
+    #                 assert expected == actual

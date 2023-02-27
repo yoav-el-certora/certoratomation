@@ -7,7 +7,7 @@ __all__ = ("router", "run_tests")
 
 from pydantic import BaseModel
 
-from certoratomation.server.constants import HandlersConstants
+from certoratomation.server.certora_test_manager import CertoraTestManager
 
 router = APIRouter()
 
@@ -17,11 +17,10 @@ class RunTestsResponse(BaseModel):
 
 
 def run_tests():
-    return subprocess.run(
-        args=HandlersConstants.RUN_TEST_COMMAND,
-        cwd=HandlersConstants.TEST_PACKAGE,
-        shell=True
-    )
+    certora_test_manager = CertoraTestManager()
+
+    return_code = certora_test_manager.run_service()
+    return return_code
 
 
 @router.post("/run_test_package", response_model=RunTestsResponse, status_code=201)

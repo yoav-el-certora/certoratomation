@@ -1,7 +1,7 @@
 import subprocess
 from fastapi import APIRouter, BackgroundTasks
 
-__all__ = ("router", "run_dev_utils", "run_new_report")
+__all__ = ("router", "run_dev_utils", "run_new_report", "kill_local_environment")
 
 from certoratomation.server.constants import HandlersConstants
 
@@ -41,6 +41,13 @@ def run_new_report():
     )
 
 
+def kill_local_environment():
+    for new_report_proc in ProcessHolder.NEW_REPORT_PROCESS:
+        new_report_proc.terminate()
+    for dev_utils_proc in ProcessHolder.DEV_UTILS_PROCESS:
+        dev_utils_proc.terminate()
+
+
 @router.post("/run_environment")
 async def run_environment(
         background_tasks: BackgroundTasks,
@@ -50,8 +57,7 @@ async def run_environment(
 
 
 @router.post("/kill_environment")
-async def kill_environment():
-    for new_report_proc in ProcessHolder.NEW_REPORT_PROCESS:
-        new_report_proc.terminate()
-    for dev_utils_proc in ProcessHolder.DEV_UTILS_PROCESS:
-        dev_utils_proc.terminate()
+async def kill_environment(
+        background_tasks: BackgroundTasks,
+):
+    background_tasks.add_task(kill_local_environment)

@@ -1,6 +1,9 @@
+import json
 
 from requests import (
     get as requests_get,
+    post as requests_post,
+    patch as requests_patch,
 )
 
 
@@ -15,6 +18,10 @@ class CertoraCloudClient:
     @property
     def url(self):
         return f'http://{self._url}:{self._port}' if self._port else f'http://{self._url}'
+
+    @url.setter
+    def url(self, url):
+        self._url = url
 
     def get_tree_view_output(self, user_id, job_id, anonymous_key=''):
         url = f'{self.url}/output/{user_id}/{job_id}/?anonymousKey={anonymous_key}'
@@ -34,6 +41,7 @@ class CertoraCloudClient:
         assert resp.status_code == 200, f'Get Progress API Call Failed! \nurl: {url} \noutput: {resp.text}'
 
         raw_data = resp.json()
+        raw_data['verificationProgress'] = json.loads(raw_data['verificationProgress'])
         return raw_data
 
     def get_asset_output(self, user_id, job_id, anonymous_key, file_name):
@@ -45,3 +53,4 @@ class CertoraCloudClient:
 
         raw_data = resp.json()
         return raw_data
+

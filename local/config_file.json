@@ -1,0 +1,23 @@
+{
+  "environment" : "local",
+  "data_candidates" : [
+    {
+      "data_environment" : "stg",
+      "user_id" : "99668",
+      "job_id" : "df7cc88dc08f4f58a430b4c6f68a95f3",
+      "anonymous_key" : "28c1c693bd38374e2ba1a9055877b93819e8d667"
+    },
+    {
+      "data_environment" : "local",
+      "user_id" : "99668",
+      "job_id" : "df7cc88dc08f4f58a430b4c6f68a95f3",
+      "anonymous_key" : "treeView2"
+    }
+  ],
+  "environment_urls" :
+  {
+    "stg" : "vaas-stg.certora.com",
+    "prod" : "prover.certora.com",
+    "local" : "http://localhost:3005/"
+  }
+}

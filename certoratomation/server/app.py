@@ -7,12 +7,8 @@ import uvicorn
 
 __all__ = (
     "certora_auto_server",
-    "run_server",
-    "run_ci_tests"
+    "run_server"
 )
-
-from .handlers.run_environment import run_dev_utils, run_new_report
-from .handlers.run_test_package import run_tests
 
 routers = [
     run_environment.router,
@@ -33,12 +29,3 @@ def run_server(host: str = None, port: int = None):
         host=host if host else '127.0.0.1',
         port=port if port else 5001
     )
-
-
-def run_ci_tests():
-    run_dev_utils()
-    run_new_report()
-
-    return_code = run_tests()
-
-    return return_code
